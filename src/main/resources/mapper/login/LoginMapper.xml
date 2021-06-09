@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.code.mypage.mapper.login.LoginMapper">
+
+    <select id ="getUserInfo" parameterType="java.util.Map" resultType="com.code.mypage.vo.login.UserInfoVO">
+        select *
+        from user_info
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUserInfo" parameterType="com.code.mypage.vo.login.UserInfoVO">
+        insert into user_info (user_id, user_pw, user_name, user_birth, user_gender, user_addr, user_phone)
+            values(#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userAddr}, #{userPhone})
+    </insert>
+
+
+
+</mapper>
