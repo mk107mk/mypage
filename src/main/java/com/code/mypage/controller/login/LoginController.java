@@ -57,6 +57,13 @@ public class LoginController {
        return resultMap;
     }
 
+    @RequestMapping(value = "/join")
+    public ModelAndView joinForm(){
+        ModelAndView view =  new ModelAndView();
+        view.setViewName("views/login/signup");
+        return view;
+    }
+
     @RequestMapping(value = "/user/join", method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> joinUser(@ModelAttribute UserInfoVO userInfo){
@@ -79,6 +86,5 @@ public class LoginController {
         return resultMap;
 
     }
-
 
 }

@@ -20,17 +20,19 @@
 
 <div class="card align-middle" style="width:20rem; border-radius:20px;">
     <div class="card-title" style="margin-top:30px;">
-        <h2 class="card-title text-center" style="color:#113366;">로그인 폼</h2>
+        <h1 class="card-title text-center" style="font-weight: bold;">로그인</h1>
     </div>
+
     <div class="card-body">
-        <form class="form-signin" method="POST" onSubmit="logincall();return false">
-            <h5 class="form-signin-heading">로그인 정보를 입력하세요</h5>
-            <label for="userId" class="sr-only">Your ID</label>
-            <input type="text" id="userId" class="form-control" placeholder="Your ID" required autofocus><BR>
-            <label for="userPw" class="sr-only">Password</label>
-            <input type="password" id="userPw" class="form-control" placeholder="Password" required><br>
-            <button id="btn-Yes" class="btn btn-lg btn-primary btn-block" type="submit">로 그 인</button>
+        <form class="form-signin"  method="POST" onsubmit="logincall(); return false">
+            <label for="userId" class="sr-only">아아디를 입력하세요</label>
+            <input type="text" id="userId"  class="form-control" placeholder="Your ID" required autofocus><BR>
+            <label for="userPw" class="sr-only">비밀번호를 입력하세요</label>
+            <input type="password" id="userPw"  class="form-control" placeholder="Password" required><br>
+            <button type="submit" id="btn-signin" class="form-control btn btn-lg btn-block"ß>로그인</button>
+            <button id="btn-signup" class="form-control btn btn-lg btn-block" onclick="goSignUp()">회원가입</button>
         </form>
+
 
     </div>
 </div>
@@ -39,4 +41,35 @@
 </div>
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.5.2/js/bootstrap.min.js}"></script></body>
+<script>
+    function goSignUp(){
+        location.href="join";
+    }
+    function logincall(){
+        alert($('#userId').val());
+        var param = {
+            userId: $('#userId').val(),
+            userPw: $('#userPw').val(),
+        };
+
+        $.ajax({
+            url: '/login/proc',
+            data: param,
+            type: 'post',
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.resultCode == 200) {
+                location.href = '/join';
+            } else {
+                alert('* 가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+                return false;
+            }
+
+        }).fail(function (data, textStatus, errorThrown) {
+            console.log(textStatus);
+
+        });
+
+    }
+</script>
 </html>
