@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.2/css/bootstrap.min.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" th:href="@{/css/login/login.css}">
-    <title>로그인 폼</title>
+    <title>회원가입</title>
 
 </head>
 
@@ -23,7 +23,7 @@
         <h1 class="card-title text-center" style="font-weight: bold;">회원가입</h1>
     </div>
     <div class="card-body">
-        <form class="form-signup" method="POST" onSubmit="logincall(); return false">
+        <form class="form-signup" method="POST">
             <div class="justify-content-between-aic"><label for="userId">아이디<span class="ico">*</span></label>
                 <input type="text" id="userId" name="userId" class="form-control form-control-signup"
                        placeholder="아이디를 입력하세요" required autofocus></div>
@@ -32,35 +32,35 @@
                 <input type="password" id="userPw" name="userPw" class="form-control form-control-signup"
                        placeholder="비밀번호를 입력하세요" required autofocus></div>
             <br>
-            <div class="justify-content-between-aic"><label for="userId">이름<span class="ico">*</span></label>
+            <div class="justify-content-between-aic"><label for="userName">이름<span class="ico">*</span></label>
                 <input type="text" id="userName" name="userName" class="form-control form-control-signup"
                        placeholder="이름을 입력하세요" required autofocus></div>
             <br>
-            <div class="justify-content-between-aic"><label for="userId">생일<span class="ico">*</span></label>
+            <div class="justify-content-between-aic"><label for="userBirth">생일<span class="ico">*</span></label>
                 <input type="text"  maxlength="8" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                        id="userBirth" name="userBirth" class="form-control form-control-signup"
                        placeholder="생년월일 8자리를 입력하세요" required autofocus></div>
             <br>
-            <div class="justify-content-between-aic"><label for="userId">성별<span class="ico">*</span></label>
+            <div class="justify-content-between-aic"><label>성별<span class="ico">*</span></label>
                 <div class="justify-content-start-aic" style="width: 80%;">
-                <div><span style="margin:0 10px;">남</span><input type="radio" id="userGender-m" name="userGender"
-                       placeholder="남" required autofocus></div>
-            <div><span style="margin:0 10px;">여</span><input type="radio" id="userGender-w" name="userGender"
-                   placeholder="여" required autofocus></div>
+                    <div><span style="margin:0 10px;">남</span><input type="radio" id="userGender-m" name="userGender" value="남"
+                                                                     placeholder="남" required autofocus></div>
+                    <div><span style="margin:0 10px;">여</span><input type="radio" id="userGender-w" name="userGender" value="여"
+                                                                     placeholder="여" required autofocus></div>
                 </div>
             </div>
             <br>
-            <div class="justify-content-between-aic"><label for="userId">주소<span class="ico">*</span></label>
+            <div class="justify-content-between-aic"><label for="userAddr">주소<span class="ico">*</span></label>
                 <input type="text" id="userAddr" name="userAddr" class="form-control form-control-signup"
                        placeholder="주소를 입력하세요" required autofocus></div>
             <br>
-            <div class="justify-content-between-aic"><label for="userId">휴대폰<span class="ico">*</span></label>
+            <div class="justify-content-between-aic"><label for="userPhone">휴대폰<span class="ico">*</span></label>
                 <input type="text" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                        id="userPhone" name="userPhone" class="form-control form-control-signup"
                        placeholder="숫자만 입력해주세요" required autofocus ></div>
             <br>
 
-            <button id="btn-signin" class="btn btn-lg btn-block" type="submit">가입하기</button>
+            <button id="btn-signin" class="btn btn-lg btn-block" onclick="goSignup()">가입하기</button>
         </form>
 
     </div>
@@ -70,5 +70,39 @@
 </div>
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+<script>
+
+    function goSignup(){
+        var param = {
+            userId:  $('#userId').val(),
+            userPw: $('#userPw').val(),
+            userName : $('#userName').val(),
+            userBirth: $('#userBirth').val(),
+            userGender:'남',
+            userAddr: $('#userAddr').val(),
+            userPhone: $('#userPhone').val(),
+        };
+
+        $.ajax({
+            url: '/user/join',
+            data: JSON.stringify(param),
+            type: 'post',
+            contentType:"application/json;charset=UTF-8",
+            dataType : 'json'
+        }).done(function (data) {
+            if (data.resultCode == 200) {
+                alert('* 회원가입 완료.');
+            } else {
+                alert('* 회원가입 실패.');
+                return false;
+            }
+
+        }).fail(function (data, textStatus, errorThrown) {
+            console.log(textStatus);
+            alert('ajax fail');
+        });
+
+    }
+</script>
 </body>
 </html>
