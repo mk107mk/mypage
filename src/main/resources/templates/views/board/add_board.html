@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://wwww.thymeleaf.org"  lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <!-- Cache reset -->
+    <meta http-equiv="Expires" content="Mon, 06 Jan 2016 00:00:01 GMT">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+
+    <!-- icon_favicon -->
+    <!-- 윈도우즈 사이트 아이콘, HiDPI/Retina 에서 Safari 나중에 읽기 사이드바 -->
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="${path}/resources/images/ico_favicon_60x60.png"> -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table/popup.css}" />
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.2/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table/reset.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table/font.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table/common.css}" />
+</head>
+<body>
+  <div id="pop_wrap">
+      <div class="pop_top">
+           <h1>게시판 등록</h1>
+           <button type="button" class="pop_close" onclick="doClose();">닫기</button>
+      </div>
+      <div class="pop_mid">
+          <div class="pop_stn">
+              <form id="addForm" method="post" enctype="multipart/form-data">
+                  <div class="pop_stn_cont">
+                      <dl class="dlBox">
+                          <dt>게시판 제목</dt>
+                          <dd>
+                              <input type="text" class="ipt_txt" id="boardTitle" name="bbsTitle" value="">
+                          </dd>
+                      </dl>
+                      <dl class="dlBox">
+                          <dt>첨부파일</dt>
+                          <dd>
+                              <input type="file" class="ipt_txt" id="file" name="file">
+                          </dd>
+                      </dl>
+                      <dl class="dlBox">
+                          <dt>게시판 내용</dt>
+                          <dd>
+                              <textarea class ="txtbox" rows="10" style="width:100%" id="bbsContents" name="boardContents"></textarea>
+                          </dd>
+                      </dl>
+                  </div>
+              </form>
+          </div>
+      </div>
+      <div class="pop_btm">
+          <button  type="button" class="btn_point" style="margin-right: 3px" onclick="addForm();">추가</button>
+          <button  type="button" style="margin-left: 3px" onclick="doClose();">취소</button>
+      </div>
+  </div>
+</body>
+<script type="text/javascript" th:src="@{/dist/js/all.js}"></script>
+<script>
+
+    //팝업닫기
+    function  doClose() {
+        self.close();
+    }
+
+
+    function addForm() {
+
+        if(validateForm()) {
+            var addForm = $('#addForm')
+            var formData = new FormData(addForm[0]);
+
+            $.ajax({
+                url:"/bbs/add/proc",
+                type: "POST",
+                data: formData,
+                enctype: 'multipart/form-data',
+                processData : false,
+                contentType : false,
+                cache: false
+            }).done(function(data) {
+                if(data.resultCode == 200) {
+                    alert('글이 등록되었습니다.')
+                    window.location.reload();
+                }else {
+                    alert('글이 등록이 실패되었습니다.');
+                    return false;
+                }
+
+            }).fail(function(error) {
+              console.log(error)
+            })
+        }
+    }
+
+
+    function validateForm() {
+        var title = $('#boardTitle');
+        var content = $('#boardContents');
+
+
+        if($.trim(title.val()).length == 0) {
+            title.focus();
+            alert('제목을 입력하시오.')
+            return false;
+        }
+
+        if($.trim(content.val()).length == 0) {
+            content.focus();
+            alert('내용을 입력하시오.')
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+
+</script>
+</html>
